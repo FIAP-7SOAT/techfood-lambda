@@ -58,11 +58,9 @@ jobs:
       # Build the SAM application
       - name: Build SAM Application
         run: |
-          cd techfood-lambda
           sam build
 
       # Deploy the SAM application
       - name: Deploy SAM Application
         run: |
-          cd techfood-lambda
           sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
