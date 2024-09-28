@@ -1,0 +1,68 @@
+name: Deploy Lambda with AWS SAM
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      # Cache node_modules
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            techfood-lambda/node_modules
+            techfood-lambda/.aws-sam/cache
+          key: ${{ runner.os }}-node-${{ hashFiles('techfood-lambda/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          cd techfood-lambda
+          npm install
+
+      # Install AWS SAM CLI
+      - name: Install AWS SAM CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y awscli
+          wget "https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip" -O sam.zip
+          unzip sam.zip -d sam-installation
+          sudo ./sam-installation/install
+          sam --version
+
+      # Configure AWS Credentials
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      # Build the SAM application
+      - name: Build SAM Application
+        run: |
+          cd techfood-lambda
+          sam build
+
+      # Deploy the SAM application
+      - name: Deploy SAM Application
+        run: |
+          cd techfood-lambda
+          sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
