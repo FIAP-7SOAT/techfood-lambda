@@ -1,127 +1,129 @@
-# techfood-lambda
+# TechFood Lambda
 
-This project contains source code and supporting files for a serverless application that you can deploy with the SAM CLI. It includes the following files and folders.
+## Descrição
 
-- hello-world - Code for the application's Lambda function written in TypeScript.
-- events - Invocation events that you can use to invoke the function.
-- hello-world/tests - Unit tests for the application code. 
-- template.yaml - A template that defines the application's AWS resources.
+TechFood Lambda é uma aplicação serverless desenvolvida utilizando o AWS Serverless Application Model (SAM). A aplicação consiste em funções Lambda que gerenciam autenticação e operações de cadastro e login para a plataforma TechFood. Com uma infraestrutura automatizada de implantação via GitHub Actions, o projeto garante escalabilidade, segurança e facilidade de manutenção.
 
-The application uses several AWS resources, including Lambda functions and an API Gateway API. These resources are defined in the `template.yaml` file in this project. You can update the template to add AWS resources through the same deployment process that updates your application code.
+## Requisitos
 
-If you prefer to use an integrated development environment (IDE) to build and test your application, you can use the AWS Toolkit.  
-The AWS Toolkit is an open source plug-in for popular IDEs that uses the SAM CLI to build and deploy serverless applications on AWS. The AWS Toolkit also adds a simplified step-through debugging experience for Lambda function code. See the following links to get started.
+Antes de começar, certifique-se de ter os seguintes requisitos instalados em sua máquina:
 
-* [CLion](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [GoLand](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [IntelliJ](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [WebStorm](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [Rider](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [PhpStorm](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [PyCharm](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [RubyMine](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [DataGrip](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [VS Code](https://docs.aws.amazon.com/toolkit-for-vscode/latest/userguide/welcome.html)
-* [Visual Studio](https://docs.aws.amazon.com/toolkit-for-visual-studio/latest/user-guide/welcome.html)
+- **AWS CLI:** A Interface de Linha de Comando da AWS é necessária para interagir com os serviços da AWS. [Instruções de instalação da AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+- **SAM CLI:** O AWS Serverless Application Model Command Line Interface (SAM CLI) é usado para desenvolver e testar aplicações serverless. [Instruções de instalação do SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
+- **Node.js e npm:** Necessários para gerenciar as dependências do projeto e executar scripts. [Download Node.js e npm](https://nodejs.org/)
+- **Docker e Docker Desktop:** Necessários para emular o ambiente AWS Lambda localmente e executar o SAM CLI.
+  - [Instruções de instalação do Docker](https://docs.docker.com/get-docker/)
+  - [Download Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
-## Deploy the sample application
+Certifique-se de que todas essas ferramentas estejam corretamente instaladas e configuradas antes de prosseguir com a instalação e execução do projeto.
 
-The Serverless Application Model Command Line Interface (SAM CLI) is an extension of the AWS CLI that adds functionality for building and testing Lambda applications. It uses Docker to run your functions in an Amazon Linux environment that matches Lambda. It can also emulate your application's build environment and API.
+## Instalação
 
-To use the SAM CLI, you need the following tools.
+1. **Clone o repositório:**
 
-* SAM CLI - [Install the SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
-* Node.js - [Install Node.js 18](https://nodejs.org/en/), including the NPM package management tool.
-* Docker - [Install Docker community edition](https://hub.docker.com/search/?type=edition&offering=community)
+   ```bash
+   git clone https://github.com/seu-usuario/techfood-lambda.git
+   cd techfood-lambda
+   ```
 
-To build and deploy your application for the first time, run the following in your shell:
+2. **Instale as dependências:**
 
-```bash
-sam build
-sam deploy --guided
-```
+   ```bash
+   cd techfood-lambda
+   npm install
+   ```
 
-The first command will build the source of your application. The second command will package and deploy your application to AWS, with a series of prompts:
+3. **Configure variáveis de ambiente:**
 
-* **Stack Name**: The name of the stack to deploy to CloudFormation. This should be unique to your account and region, and a good starting point would be something matching your project name.
-* **AWS Region**: The AWS region you want to deploy your app to.
-* **Confirm changes before deploy**: If set to yes, any change sets will be shown to you before execution for manual review. If set to no, the AWS SAM CLI will automatically deploy application changes.
-* **Allow SAM CLI IAM role creation**: Many AWS SAM templates, including this example, create AWS IAM roles required for the AWS Lambda function(s) included to access AWS services. By default, these are scoped down to minimum required permissions. To deploy an AWS CloudFormation stack which creates or modifies IAM roles, the `CAPABILITY_IAM` value for `capabilities` must be provided. If permission isn't provided through this prompt, to deploy this example you must explicitly pass `--capabilities CAPABILITY_IAM` to the `sam deploy` command.
-* **Save arguments to samconfig.toml**: If set to yes, your choices will be saved to a configuration file inside the project, so that in the future you can just re-run `sam deploy` without parameters to deploy changes to your application.
+   - Crie um arquivo `.env` na raiz do diretório `techfood-lambda/` e adicione as variáveis necessárias, como credenciais da AWS e outras configurações pertinentes. Exemplo:
 
-You can find your API Gateway Endpoint URL in the output values displayed after deployment.
+   ```bash
+   USER_POOL_ID=aws_congnito_user_pool_id>
+   CLIENT_ID=<aws_congnito_pool_client_id>
+   ```
 
-## Use the SAM CLI to build and test locally
+## Como executar localmente
 
-Build your application with the `sam build` command.
+1. **Inicie a API localmente utilizando o AWS SAM:**
 
-```bash
-techfood-lambda$ sam build
-```
+   ```bash
+   sam local start-api --debug
+   ```
 
-The SAM CLI installs dependencies defined in `hello-world/package.json`, compiles TypeScript with esbuild, creates a deployment package, and saves it in the `.aws-sam/build` folder.
+2. **Teste os endpoints:**
 
-Test a single function by invoking it directly with a test event. An event is a JSON document that represents the input that the function receives from the event source. Test events are included in the `events` folder in this project.
+   - **Autenticação:** `GET http://localhost:3000/auth`
+   - **Cadastro:** `POST http://localhost:3000/signup`
+   - **Login:** `POST http://localhost:3000/signin`
 
-Run functions locally and invoke them with the `sam local invoke` command.
+## Stack e ferramentas utilizadas
 
-```bash
-techfood-lambda$ sam local invoke HelloWorldFunction --event events/event.json
-```
+- **Linguagem:** TypeScript
+- **Framework:** AWS Serverless Application Model (SAM)
+- **Serviços AWS:**
+  - AWS Lambda
+  - API Gateway
+  - AWS Cognito (para gerenciamento de identidade)
+- **Ferramentas de Desenvolvimento:**
+  - Node.js
+  - npm
+  - esbuild (para bundling)
+  - ESLint e Prettier (para linting e formatação de código)
+- **Integração Contínua e Deploy:** GitHub Actions
 
-The SAM CLI can also emulate your application's API. Use the `sam local start-api` to run the API locally on port 3000.
+## Funções
 
-```bash
-techfood-lambda$ sam local start-api
-techfood-lambda$ curl http://localhost:3000/
-```
+### 1. Auth Function (`auth.lambdaHandler`)
 
-The SAM CLI reads the application template to determine the API's routes and the functions that they invoke. The `Events` property on each function's definition includes the route and method for each path.
+- **Descrição:** Gerencia a autenticação de usuários, verificando tokens JWT e assegurando que apenas usuários autenticados possam acessar determinados recursos.
+- **Endpoint:** `GET /auth`
+- **Exemplo de Request:**
+  ```http
+  GET /auth HTTP/1.1
+  Host: localhost:3000
+  Authorization: Bearer <access_token>
+  ```
 
-```yaml
-      Events:
-        HelloWorld:
-          Type: Api
-          Properties:
-            Path: /hello
-            Method: get
-```
+### 2. Signup Function (`signup.lambdaHandler`)
 
-## Add a resource to your application
-The application template uses AWS Serverless Application Model (AWS SAM) to define application resources. AWS SAM is an extension of AWS CloudFormation with a simpler syntax for configuring common serverless application resources such as functions, triggers, and APIs. For resources not included in [the SAM specification](https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md), you can use standard [AWS CloudFormation](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html) resource types.
+- **Descrição:** Lida com o cadastro de novos usuários, criando entradas no AWS Cognito e validando as informações fornecidas.
+- **Endpoint:** `POST /signup`
+- **Exemplo de Request:**
 
-## Fetch, tail, and filter Lambda function logs
+  ```http
+  POST /signup HTTP/1.1
+  Host: localhost:3000
+  Content-Type: application/json
 
-To simplify troubleshooting, SAM CLI has a command called `sam logs`. `sam logs` lets you fetch logs generated by your deployed Lambda function from the command line. In addition to printing the logs on the terminal, this command has several nifty features to help you quickly find the bug.
+  Body: {
+    "cpf": "29440414871"
+    "email": "usuario@exemplo.com",
+    "name": "Nome do Usuário"
+    "password": "1234@Test",
+  }
+  ```
 
-`NOTE`: This command works for all AWS Lambda functions; not just the ones you deploy using SAM.
+### 3. Signin Function (`signin.lambdaHandler`)
 
-```bash
-techfood-lambda$ sam logs -n HelloWorldFunction --stack-name techfood-lambda --tail
-```
+- **Descrição:** Autentica usuários existentes, gerando tokens de sessão após a validação das credenciais.
+- **Endpoint:** `POST /signin`
+- **Exemplo de Request:**
 
-You can find more information and examples about filtering Lambda function logs in the [SAM CLI Documentation](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-logging.html).
+  ```http
+  POST /signin HTTP/1.1
+  Host: localhost:3000
+  Content-Type: application/json
 
-## Unit tests
+  Body: {
+    "cpf": "29440414871",
+    "password": "1234@Test"
+  }
+  ```
 
-Tests are defined in the `hello-world/tests` folder in this project. Use NPM to install the [Jest test framework](https://jestjs.io/) and run unit tests.
+## Deploy
 
-```bash
-techfood-lambda$ cd hello-world
-hello-world$ npm install
-hello-world$ npm run test
-```
+A implantação da aplicação é automatizada através do GitHub Actions. Sempre que houver um push para a branch `main`, o workflow definido em `.github/workflows/deploy.yml` será executado, construindo e implantando a aplicação no AWS usando SAM.
 
-## Cleanup
+## Licença
 
-To delete the sample application that you created, use the AWS CLI. Assuming you used your project name for the stack name, you can run the following:
-
-```bash
-sam delete --stack-name techfood-lambda
-```
-
-## Resources
-
-See the [AWS SAM developer guide](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html) for an introduction to SAM specification, the SAM CLI, and serverless application concepts.
-
-Next, you can use AWS Serverless Application Repository to deploy ready to use Apps that go beyond hello world samples and learn how authors developed their applications: [AWS Serverless Application Repository main page](https://aws.amazon.com/serverless/serverlessrepo/)
+Este projeto está licenciado sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
