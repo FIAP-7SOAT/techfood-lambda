@@ -13,7 +13,6 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
     }
 
     const body = JSON.parse(event.body);
-
     const { cpf, password } = body;
 
     if (!cpf || !password) {
@@ -23,8 +22,7 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
         };
     }
 
-    console.log('cpf', cpf);
-    console.log('password', password);
+    console.log(`cpf: ${cpf} | password: ${password}`);
 
     if (!validarCPF(cpf)) {
         return {
@@ -35,7 +33,6 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
 
     try {
         const client = new CognitoIdentityProviderClient({ region: 'us-east-1' });
-
         const command = new InitiateAuthCommand({
             ClientId: CLIENT_ID,
             AuthFlow: 'USER_PASSWORD_AUTH',
@@ -44,7 +41,6 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
                 PASSWORD: password,
             },
         });
-
         const response = await client.send(command);
 
         console.log('response', response);
