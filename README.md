@@ -97,9 +97,9 @@ Certifique-se de que todas essas ferramentas estejam corretamente instaladas e c
 
   Body: {
     "cpf": "29440414871"
-    "email": "usuario@exemplo.com",
+    "email": "usuario@exemplo.com"
     "name": "Nome do Usuário"
-    "password": "1234@Test",
+    "password": "1234@Test"
   }
   ```
 
@@ -115,7 +115,7 @@ Certifique-se de que todas essas ferramentas estejam corretamente instaladas e c
   Content-Type: application/json
 
   Body: {
-    "cpf": "29440414871",
+    "cpf": "29440414871"
     "password": "1234@Test"
   }
   ```
