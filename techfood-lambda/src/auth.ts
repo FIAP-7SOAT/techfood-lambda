@@ -28,6 +28,7 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
             body: JSON.stringify({
                 message: 'User is authorized',
                 username: response.Username,
+                UserAttributes: response.UserAttributes,
             }),
         };
     } catch (error) {

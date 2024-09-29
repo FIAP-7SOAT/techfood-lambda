@@ -58,7 +58,6 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
                     Value: cpf,
                 },
             ],
-            TemporaryPassword: `${email}AND${cpf}`,
         });
         const createUserResponse = await client.send(command);
 

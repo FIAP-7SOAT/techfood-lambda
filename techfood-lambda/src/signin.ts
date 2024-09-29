@@ -47,7 +47,10 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
 
         return {
             statusCode: 200,
-            body: JSON.stringify({ message: 'User signed in' }),
+            body: JSON.stringify({
+                message: 'User signed in',
+                AuthenticationResult: response.AuthenticationResult,
+            }),
         };
     } catch (err) {
         console.log(err);
