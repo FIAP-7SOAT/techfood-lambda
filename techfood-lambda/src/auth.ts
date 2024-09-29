@@ -3,11 +3,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 
 export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     try {
-        // Extract the Authorization token from the event
         const authorization = event.headers.Authorization;
-
-        console.log('authorization', authorization);
-
         const token = authorization?.split(' ')[1];
 
         if (!token) {
@@ -20,16 +16,13 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
         console.log('token', token);
 
         const client = new CognitoIdentityProviderClient({ region: 'us-east-1' });
-        // Verify the token with Cognito
         const command = new GetUserCommand({
             AccessToken: token,
         });
-
         const response = await client.send(command);
 
         console.log('response', response);
 
-        // If we reach here, the token is valid
         return {
             statusCode: 200,
             body: JSON.stringify({

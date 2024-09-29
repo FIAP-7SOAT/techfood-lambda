@@ -17,16 +17,10 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
     }
 
     const body = JSON.parse(event.body);
-
-    console.log('body', body);
-
+    const invalidFields = [];
     const { cpf, email, name, password } = body;
 
-    console.log('cpf', cpf);
-    console.log('email', email);
-    console.log('name', name);
-    console.log('password', password);
-    const invalidFields = [];
+    console.log(`cpf: ${cpf} | email: ${email} | name: ${name} | password: ${password}`);
 
     if (!validarEmail(email)) {
         invalidFields.push('email');
@@ -35,8 +29,6 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
     if (!validarCPF(cpf)) {
         invalidFields.push('cpf');
     }
-
-    console.log('invalidFields', invalidFields);
 
     if (!validarEmail(email) || !validarCPF(cpf)) {
         console.log('Found invalidFields', invalidFields);
@@ -47,11 +39,7 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
     }
 
     try {
-        console.log('Creating user');
         const client = new CognitoIdentityProviderClient({ region: 'us-east-1' });
-
-        console.log('client', client);
-
         const command = new AdminCreateUserCommand({
             UserPoolId: USER_POOL_ID,
             Username: cpf,
@@ -72,12 +60,9 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
             ],
             TemporaryPassword: `${email}AND${cpf}`,
         });
-
-        console.log('command', command);
-
         const createUserResponse = await client.send(command);
 
-        console.log('response', createUserResponse);
+        console.log('createUserResponse', createUserResponse);
 
         if (createUserResponse.$metadata.httpStatusCode !== 200) {
             return {
